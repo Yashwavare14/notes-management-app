@@ -1,16 +1,15 @@
 import { pgTable, text, timestamp, uuid, integer } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
-  clerkId: uuid("clerk_id").defaultRandom().primaryKey(),
+  clerkId: text("clerk_id").primaryKey(),
   name: text("name").notNull(),
   email: text("email").notNull().unique(),
-  password: text("password").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const notes = pgTable("notes", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id").references(() => users.clerkId, { onDelete: "cascade" }).notNull(),  // ← uuid here too
+  userId: text("user_id").references(() => users.clerkId, { onDelete: "cascade" }).notNull(),
   title: text("title").notNull(),
   content: text("content").notNull(),
   tags: text("tags").array().default([]),
